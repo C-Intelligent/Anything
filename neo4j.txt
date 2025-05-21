@@ -1,0 +1,14 @@
+LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/C-Intelligent/Anything/master/junfmea.csv" AS row
+
+MERGE (d:设备 {name: row.设备})
+MERGE (f:故障模式 {name: row.故障模式})
+MERGE (c:故障原因 {description: row.故障原因})
+MERGE (s:故障严重性 {level: row.故障严重性})
+MERGE (freq:故障频率 {level: row.故障频率})
+
+// Relationships
+MERGE (d)-[:HAS_FAILURE]->(f)
+MERGE (f)-[:CAUSED_BY]->(c)
+MERGE (c)-[:LEADS_TO]->(s)
+MERGE (c)-[:HAS_SEVERITY]->(s)
+MERGE (f)-[:HAS_FREQUENCY]->(freq)
